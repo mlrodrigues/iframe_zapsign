@@ -48,9 +48,9 @@ class _WebViewExampleState extends State<WebViewExample> {
             child: InAppWebView(
               initialSettings: InAppWebViewSettings(
                 javaScriptEnabled: true,
-                supportZoom: false,
+                mediaPlaybackRequiresUserGesture: false, // importante para vídeo/áudio
+                allowsInlineMediaPlayback: true,
               ),
-
               initialUrlRequest: URLRequest(url: WebUri(url)),
               onWebViewCreated: (controller) {
                 webViewController = controller;
@@ -61,7 +61,13 @@ class _WebViewExampleState extends State<WebViewExample> {
                   urlController.text = this.url;
                 });
               },
-            ),
+              onPermissionRequest: (controller, permissionRequest) async {
+                return PermissionResponse(
+                  resources: permissionRequest.resources,
+                  action: PermissionResponseAction.GRANT,
+                );
+              },
+            )
           ),
         ],
       ),
